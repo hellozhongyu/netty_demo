@@ -7,6 +7,10 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.logging.LoggingHandler;
 import netty.message.LoginRequestMessage;
 import netty.protocal.MessageCodec;
+import netty.protocal.MessageCodecSharable;
+
+import java.util.ArrayList;
+
 
 public class TestMessageCodec {
 
@@ -14,7 +18,8 @@ public class TestMessageCodec {
         EmbeddedChannel embeddedChannel = new EmbeddedChannel(
                 new LengthFieldBasedFrameDecoder(1024, 12, 4, 0, 0),
                 new LoggingHandler(),
-                new MessageCodec()
+//                new MessageCodec()
+                new MessageCodecSharable()
         );
 
         // encode
@@ -23,8 +28,10 @@ public class TestMessageCodec {
 
         // decode
         ByteBuf buf = ByteBufAllocator.DEFAULT.buffer();
-        new MessageCodec().encodeTest(null, message, buf);
+//        new MessageCodec().encodeTest(null, message, buf);
+        ArrayList<Object> list = new ArrayList<>();
+        new MessageCodecSharable().encodeTest(null, message, list);
 
-        embeddedChannel.writeInbound(buf);
+        embeddedChannel.writeInbound((ByteBuf) list.get(0));
     }
 }
