@@ -1,21 +1,17 @@
 package netty.message;
 
-public class LoginRequestMessage extends Message{
+import lombok.Data;
+import lombok.ToString;
 
-    private String userName;
-
-    public LoginRequestMessage(String userName, String password, String nickName) {
-        this.userName = userName;
-        this.password = password;
-        this.nickName = nickName;
+@Data
+@ToString(callSuper = true)
+public class LoginRequestMessage extends Message {
+    public String getUsername() {
+        return username;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -26,23 +22,19 @@ public class LoginRequestMessage extends Message{
         this.password = password;
     }
 
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
+    private String username;
     private String password;
-    private String nickName;
+
+    public LoginRequestMessage() {
+    }
+
+    public LoginRequestMessage(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
     @Override
     public int getMessageType() {
-        return LoginRequestMessgae;
-    }
-
-    @Override
-    public int getSequenceId() {
-        return 0;
+        return LoginRequestMessage;
     }
 }

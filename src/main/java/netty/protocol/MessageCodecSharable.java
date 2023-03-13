@@ -1,4 +1,4 @@
-package netty.protocal;
+package netty.protocol;
 
 
 import io.netty.buffer.ByteBuf;

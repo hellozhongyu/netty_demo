@@ -1,9 +1,8 @@
-package netty.protocal;
+package netty.protocol;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
-import lombok.Data;
 import netty.message.Message;
 
 import java.io.ByteArrayInputStream;

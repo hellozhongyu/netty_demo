@@ -6,8 +6,8 @@ import io.netty.channel.embedded.EmbeddedChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.logging.LoggingHandler;
 import netty.message.LoginRequestMessage;
-import netty.protocal.MessageCodec;
-import netty.protocal.MessageCodecSharable;
+import netty.protocol.MessageCodec;
+import netty.protocol.MessageCodecSharable;
 
 import java.util.ArrayList;
 
@@ -23,7 +23,7 @@ public class TestMessageCodec {
         );
 
         // encode
-        LoginRequestMessage message = new LoginRequestMessage("zhangsan", "123", "张三");
+        LoginRequestMessage message = new LoginRequestMessage("zhangsan", "123");
         embeddedChannel.writeOutbound(message);
 
         // decode
