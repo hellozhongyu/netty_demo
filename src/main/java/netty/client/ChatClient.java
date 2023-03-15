@@ -84,9 +84,32 @@ public class ChatClient {
                                     System.out.println("quit");
                                     System.out.println("==================================");
                                     String command = scanner.nextLine();
-                                    System.out.println(command);
+                                    String[] s = command.split(" ");
+                                    switch (s[0]) {
+                                        case "send":
+                                            ctx.writeAndFlush(new ChatRequestMessage(username, s[1], s[2]));
+                                            break;
+                                        case "gsend":
+                                            ctx.writeAndFlush(new GroupChatRequestMessage(username, s[1], s[2]));
+                                            break;
+                                        case "gcreate":
+                                            Set<String> members = new HashSet<>(Arrays.asList(s[2].split(",")));
+                                            ctx.writeAndFlush(new GroupCreateRequestMessage(s[1], members));
+                                            break;
+                                        case "gmembers":
+                                            ctx.writeAndFlush(new GroupMembersRequestMessage(s[1]));
+                                            break;
+                                        case "gjoin":
+                                            ctx.writeAndFlush(new GroupJoinRequestMessage(username, s[1]));
+                                            break;
+                                        case "gquit":
+                                            ctx.writeAndFlush(new GroupQuitRequestMessage(username, s[1]));
+                                            break;
+                                        case "quit":
+                                            ctx.channel().close();
+                                            break;
+                                    }
                                 }
-
                             }, "system in").start();
                         }
 
