@@ -10,8 +10,7 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import netty.protocol.MessageCodecSharable;
 import netty.protocol.ProtocolFrameDecoder;
-import netty.server.handler.ChatRequestMessageHandler;
-import netty.server.handler.LoginRequestMessageHandler;
+import netty.server.handler.*;
 
 public class ChatServer {
 
@@ -24,6 +23,11 @@ public class ChatServer {
         MessageCodecSharable MESSAGE_CODEC = new MessageCodecSharable();
         LoginRequestMessageHandler LOGIN_HANDLER = new LoginRequestMessageHandler();
         ChatRequestMessageHandler CHAT_HANDLER = new ChatRequestMessageHandler();
+        GroupCreateRequestMessageHandler GROUP_CREATE_HANDLER = new GroupCreateRequestMessageHandler();
+        GroupJoinRequestMessageHandler GROUP_JOIN_HANDLER = new GroupJoinRequestMessageHandler();
+        GroupQuitRequestMessageHandler GROUP_QUIT_HANDLER = new GroupQuitRequestMessageHandler();
+        GroupMembersRequestHandler GROUP_MEMBERS_HANDLER = new GroupMembersRequestHandler();
+        GroupChatRequestMessageHandler GROUP_CHAT_HANDLER = new GroupChatRequestMessageHandler();
         try {
 
             ServerBootstrap serverBootstrap = new ServerBootstrap();
@@ -38,6 +42,11 @@ public class ChatServer {
                             ch.pipeline().addLast(MESSAGE_CODEC);
                             ch.pipeline().addLast(LOGIN_HANDLER);
                             ch.pipeline().addLast(CHAT_HANDLER);
+                            ch.pipeline().addLast(GROUP_CREATE_HANDLER);
+                            ch.pipeline().addLast(GROUP_JOIN_HANDLER);
+                            ch.pipeline().addLast(GROUP_QUIT_HANDLER);
+                            ch.pipeline().addLast(GROUP_MEMBERS_HANDLER);
+                            ch.pipeline().addLast(GROUP_CHAT_HANDLER);
                         }
                     });
 

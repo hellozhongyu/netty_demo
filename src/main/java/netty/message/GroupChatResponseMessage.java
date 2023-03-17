@@ -17,6 +17,7 @@ public class GroupChatResponseMessage extends AbstractResponseMessage {
         this.from = from;
         this.content = content;
     }
+
     @Override
     public int getMessageType() {
         return GroupChatResponseMessage;
