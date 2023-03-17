@@ -38,7 +38,7 @@ public class ChatClient {
         MessageCodecSharable MESSAGE_CODEC = new MessageCodecSharable();
         CountDownLatch WAIT_FOR_LOGIN = new CountDownLatch(1);
         AtomicBoolean LOGIN = new AtomicBoolean(false);
-        AtomicBoolean EXIT = new AtomicBoolean(false);
+        AtomicBoolean EXIT = new AtomicBoolean(true);
         Scanner scanner = new Scanner(System.in);
         try {
             Bootstrap bootstrap = new Bootstrap();
@@ -50,6 +50,19 @@ public class ChatClient {
                     ch.pipeline().addLast(new ProtocolFrameDecoder());
                     ch.pipeline().addLast(LOGGING_HANDLER);
                     ch.pipeline().addLast(MESSAGE_CODEC);
+                    // 如果 3S 内没有向服务器写数据， 会触发一个 IdleState#WRITER_IDLE 事件
+                    ch.pipeline().addLast(new IdleStateHandler(0, 3, 0));
+                    ch.pipeline().addLast(new ChannelDuplexHandler(){
+                        @Override
+                        public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+                            IdleStateEvent event = (IdleStateEvent) evt;
+                            // 触发了读空闲事件
+                            if (event.state() == IdleState.WRITER_IDLE){
+                                log.debug("已经 3S 没有写数据了，发送心跳给服务器");
+                                ctx.writeAndFlush(new PingMessage());
+                            }
+                        }
+                    });
                     ch.pipeline().addLast("client handler", new ChannelInboundHandlerAdapter() {
                         @Override
                         public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -73,7 +86,7 @@ public class ChatClient {
                                     return;
                                 }
 
-                                while (true) {
+                                while (EXIT.get()) {
                                     System.out.println("==================================");
                                     System.out.println("send [username] [content]");
                                     System.out.println("gsend [group name] [content]");
@@ -107,6 +120,7 @@ public class ChatClient {
                                             ctx.writeAndFlush(new GroupQuitRequestMessage(username, s[1]));
                                             break;
                                         case "quit":
+                                            EXIT.set(false);
                                             ctx.channel().close();
                                             break;
                                     }
