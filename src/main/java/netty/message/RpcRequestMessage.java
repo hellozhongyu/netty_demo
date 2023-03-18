@@ -44,4 +44,44 @@ public class RpcRequestMessage extends Message {
     public int getMessageType() {
         return RPC_MESSAGE_TYPE_REQUEST;
     }
+
+    public String getInterfaceName() {
+        return interfaceName;
+    }
+
+    public void setInterfaceName(String interfaceName) {
+        this.interfaceName = interfaceName;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
+    }
+
+    public Class<?> getReturnType() {
+        return returnType;
+    }
+
+    public void setReturnType(Class<?> returnType) {
+        this.returnType = returnType;
+    }
+
+    public Class[] getParameterTypes() {
+        return parameterTypes;
+    }
+
+    public void setParameterTypes(Class[] parameterTypes) {
+        this.parameterTypes = parameterTypes;
+    }
+
+    public Object[] getParameterValue() {
+        return parameterValue;
+    }
+
+    public void setParameterValue(Object[] parameterValue) {
+        this.parameterValue = parameterValue;
+    }
 }

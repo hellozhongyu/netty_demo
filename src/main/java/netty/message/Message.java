@@ -18,6 +18,14 @@ public abstract class Message implements Serializable {
         return messageClasses.get(messageType);
     }
 
+    public void setSequenceId(int sequenceId) {
+        this.sequenceId = sequenceId;
+    }
+
+    public void setMessageType(int messageType) {
+        this.messageType = messageType;
+    }
+
     private int sequenceId;
 
     private int messageType;

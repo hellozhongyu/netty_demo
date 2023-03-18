@@ -43,6 +43,10 @@ public class ChatClient {
         try {
             Bootstrap bootstrap = new Bootstrap();
             bootstrap.channel(NioSocketChannel.class);
+                    // ServerSocketChannel.option 给 ServerSocketChannel 配置参数
+                    // ChannelOption.CONNECT_TIMEOUT_MILLIS 用在客户端连接时，如果在制定毫秒内无法连接会抛出异常
+            bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 1000);
+                    // ServerSocketChannel.childOption 给 SocketChannel 配置参数
             bootstrap.group(group);
             bootstrap.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
@@ -142,7 +146,8 @@ public class ChatClient {
 
                 }
             });
-            Channel channel = bootstrap.connect("localhost", 8080).sync().channel();
+            ChannelFuture future = bootstrap.connect("localhost", 8080);
+            Channel channel = future.sync().channel();
             channel.closeFuture().sync();
         } catch (Exception e) {
             log.error("client error", e);
